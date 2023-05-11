@@ -35,6 +35,7 @@ face=YOLO("yolov8n-face.pt")
 #             print("empty frame error")
 #     return frame
 
+
 def image_face_detector(image,flag=True):
     frame=image.copy()
     results=face(frame)
