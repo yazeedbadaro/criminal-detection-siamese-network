@@ -15,6 +15,7 @@ from ultralytics import YOLO
 
 face=YOLO("yolov8n-face.pt")
 
+
 # def image_face_detector(image):
 #     frame=image.copy()
 #     _, box,_ =face.face_detection(frame_arr=frame, frame_status=True, model='tiny')

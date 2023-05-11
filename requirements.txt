@@ -1,0 +1,5 @@
+streamlit
+opencv-python
+streamlit_webrtc
+ultralytics
+streamlit_option_menu
