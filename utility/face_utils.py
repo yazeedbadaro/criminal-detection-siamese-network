@@ -5,8 +5,13 @@ import subprocess
 from streamlit_webrtc import webrtc_streamer
 import av
 from ultralytics import YOLO
+import os
 
 face=YOLO("yolov8n-face.pt")
+
+os.mkdir("detected_faces")
+os.mkdir("uploaded_videos")
+os.mkdir("video_detection")
 
 def image_face_detector(image,n,flag=True):
     frame=image.copy()
