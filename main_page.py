@@ -24,7 +24,7 @@ if selected=="Upload Image":
 
     if uploaded_file is not None:
         st.image(uploaded_file)
-        st.image(image_face_detector(np.array(Image.open(uploaded_file))))
+        st.image(image_face_detector(np.array(Image.open(uploaded_file)),n=1))
 
 #Video
 if selected=="Upload Video":

@@ -8,9 +8,7 @@ from ultralytics import YOLO
 
 face=YOLO("yolov8n-face.pt")
 
-set
-
-def image_face_detector(image,flag=True):
+def image_face_detector(image,n,flag=True):
     frame=image.copy()
     results=face(frame)
     boxes=results[0].boxes.xyxy
@@ -26,9 +24,9 @@ def image_face_detector(image,flag=True):
 
         try:
             if flag:
-                cv2.imwrite(f"detected_faces/face{i}.jpg",image[y1:y2, x1:x2,::-1])
+                cv2.imwrite(f"detected_faces/frame{n}_face{i}.jpg",image[y1:y2, x1:x2,::-1])
             else:
-                cv2.imwrite(f"detected_faces/face{i}.jpg",image[y1:y2, x1:x2])
+                cv2.imwrite(f"detected_faces/frame{n}_face{i}.jpg",image[y1:y2, x1:x2])
             i=i+1
         except:
             print("empty frame error")
@@ -53,7 +51,7 @@ def video_face_detector(uploaded_file):
         ret, frame = cap.read()
         
         if ret == True:
-            out.write(image_face_detector(frame,False))
+            out.write(image_face_detector(frame,counter+1,False))
             my_bar.progress((counter + 1)/n_frame, text="Processing the video. Please Wait.")
             counter=counter+1
         else:
@@ -67,8 +65,13 @@ def video_face_detector(uploaded_file):
     st.video(convertedVideo)
     
 def video_frame_callback(frame):
+    if not hasattr(video_frame_callback, "frame_number"):
+        video_frame_callback.frame_number = 1
+
     frame = frame.to_ndarray(format="bgr24")
 
-    processed = image_face_detector(frame,False)
+    processed = image_face_detector(frame, video_frame_callback.frame_number, False)
+
+    video_frame_callback.frame_number += 1
 
     return av.VideoFrame.from_ndarray(processed, format="bgr24")
