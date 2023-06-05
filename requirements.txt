@@ -5,3 +5,5 @@ ultralytics
 streamlit_option_menu
 tensorflow 
 scikit-learn
+torch
+torchvision
