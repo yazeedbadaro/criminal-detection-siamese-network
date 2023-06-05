@@ -6,6 +6,7 @@ from streamlit_webrtc import webrtc_streamer
 import av
 from ultralytics import YOLO
 import os
+from glob import glob
 
 face=YOLO("yolov8n-face.pt")
 
@@ -13,12 +14,17 @@ os.mkdir("detected_faces")
 os.mkdir("uploaded_videos")
 os.mkdir("video_detection")
 
+def get_conf():
+    confidences=[]
+    for img in glob("detected_faces/*.jpg"):
+        confidences.append(float(img.split("_")[-1].split(".jpg")[0]))
+    return confidences
+
 def image_face_detector(image,n,flag=True):
     frame=image.copy()
     results=face(frame)
     boxes=results[0].boxes.xyxy
     i=1
-    
     for box in boxes:
         (x1,y1,x2,y2)=[int(x) for x in box.tolist()]
         cv2.rectangle(frame,(x1,y1),(x2,y2),(255, 0, 0),2)
@@ -29,9 +35,9 @@ def image_face_detector(image,n,flag=True):
 
         try:
             if flag:
-                cv2.imwrite(f"detected_faces/frame{n}_face{i}.jpg",image[y1:y2, x1:x2,::-1])
+                cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2,::-1])
             else:
-                cv2.imwrite(f"detected_faces/frame{n}_face{i}.jpg",image[y1:y2, x1:x2])
+                cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2])
             i=i+1
         except:
             print("empty frame error")
