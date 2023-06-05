@@ -5,12 +5,7 @@ import torch.nn.functional as F
 
 def evaluate_pair(output1,output2,target,threshold):
     euclidean_distance = F.pairwise_distance(output1, output2)
-    # if target == 1:
-    #     return euclidean_distance > threshold
-    # else:
-    #     return euclidean_distance <= threshold
     cond = euclidean_distance<threshold
-    # print(cond)
     pos_sum = 0
     neg_sum = 0
     pos_acc = 0
