@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="👨‍🎓", 
 )
 
-with open("back.png", "rb") as image_file:
+with open("images/back.png", "rb") as image_file:
     encoded_string = base64.b64encode(image_file.read())
 st.markdown(
 f"""
@@ -42,7 +42,7 @@ if selected=="How to use":
     
     st.subheader("Upload an Image or Video")
     st.markdown("Simply :red[drag] and :blue[drop] your desired image or video")
-    file_ = open("upload_gif_dark.gif", "rb")
+    file_ = open("images/upload_gif_dark.gif", "rb")
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
