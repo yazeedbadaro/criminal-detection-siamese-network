@@ -5,6 +5,25 @@ from streamlit_option_menu import option_menu
 import pinecone
 import base64
 
+st.set_page_config(
+    page_title="criminal detection", 
+    page_icon="👨‍🎓", 
+)
+
+with open("back.png", "rb") as image_file:
+    encoded_string = base64.b64encode(image_file.read())
+st.markdown(
+f"""
+<style>
+.stApp {{
+    background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+    background-size: cover
+}}
+</style>
+""",
+unsafe_allow_html=True
+)
+    
 
 pinecone.init(api_key= "5030e476-e093-4104-83d0-ec6f09ca7542", environment="northamerica-northeast1-gcp")
 index = pinecone.Index("grad-index")
@@ -23,7 +42,7 @@ if selected=="How to use":
     
     st.subheader("Upload an Image or Video")
     st.markdown("Simply :red[drag] and :blue[drop] your desired image or video")
-    file_ = open("upload_gif.gif", "rb")
+    file_ = open("upload_gif_dark.gif", "rb")
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
@@ -32,11 +51,10 @@ if selected=="How to use":
         f'<img src="data:image/gif;base64,{data_url}" alt="upload gif">',
         unsafe_allow_html=True,
     )
-    st.markdown("Once the file is done being processed a list of detected faces will appear as such:")
-    st.image(Image.open("Screenshot 2023-06-07 at 1.36.11 AM.png").resize((600,180)))
+    st.markdown("")
+    st.markdown("Once the file is done being processed a list of detected faces will appear.")
     st.subheader("Webcam")
-    st.markdown("Click on the :red[RED START BUTTON] to start your camera then point it at the area where the detection will happen. Once you are done click on the 'detect faces' button and a list of detected faces will appear as such:")
-    st.image(Image.open("Screenshot 2023-06-07 at 1.36.11 AM.png").resize((600,180)))
+    st.markdown("Click on the :red[RED START BUTTON] to start your camera then point it at the area where the detection will happen. Once you are done click on the 'detect faces' button and a list of detected faces will appear.")
 
 #Image
 if selected=="Upload Image":
