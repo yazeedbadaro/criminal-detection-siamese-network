@@ -3,9 +3,13 @@ from PIL import Image
 from utility.face_utils import *
 from streamlit_option_menu import option_menu
 import pinecone
+import base64
+
 
 pinecone.init(api_key= "5030e476-e093-4104-83d0-ec6f09ca7542", environment="northamerica-northeast1-gcp")
 index = pinecone.Index("grad-index")
+
+st.session_state.more_stuff = False
 
 #main menu
 selected = option_menu(None, ["How to use","Upload Image","Upload Video","Webcam"], 
@@ -17,11 +21,22 @@ st.header(selected)
 #How to use
 if selected=="How to use":
     
-    st.subheader("Upload an Image")
-    st.markdown("hello")
-    st.subheader("Upload a Video")
-    st.markdown("hello")
+    st.subheader("Upload an Image or Video")
+    st.markdown("Simply :red[drag] and :blue[drop] your desired image or video")
+    file_ = open("upload_gif.gif", "rb")
+    contents = file_.read()
+    data_url = base64.b64encode(contents).decode("utf-8")
+    file_.close()
 
+    st.markdown(
+        f'<img src="data:image/gif;base64,{data_url}" alt="upload gif">',
+        unsafe_allow_html=True,
+    )
+    st.markdown("Once the file is done being processed a list of detected faces will appear as such:")
+    st.image(Image.open("Screenshot 2023-06-07 at 1.36.11 AM.png").resize((600,180)))
+    st.subheader("Webcam")
+    st.markdown("Click on the :red[RED START BUTTON] to start your camera then point it at the area where the detection will happen. Once you are done click on the 'detect faces' button and a list of detected faces will appear as such:")
+    st.image(Image.open("Screenshot 2023-06-07 at 1.36.11 AM.png").resize((600,180)))
 
 #Image
 if selected=="Upload Image":
@@ -57,10 +72,10 @@ if selected=="Upload Image":
                         with col:
                             st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
                             st.divider()
-                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
-                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
-                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
-                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
+                            st.markdown("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
 
 
 #Video
@@ -97,15 +112,14 @@ if selected=="Upload Video":
                         with col:
                             st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
                             st.divider()
-                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
-                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
-                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
-                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
+                            st.markdown("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
 
     
 #webcam
 if selected=="Webcam":
-    st.session_state.more_stuff = False
 
     webrtc_streamer(key="example",video_frame_callback=video_frame_callback,media_stream_constraints={"video": True, "audio": False})
     
@@ -140,7 +154,8 @@ if selected=="Webcam":
                         with col:
                             st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
                             st.divider()
-                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
-                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
-                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
-                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
+                            st.markdown("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
+    empty_files()
