@@ -26,11 +26,11 @@ if selected=="How to use":
 #Image
 if selected=="Upload Image":
     empty_files()
-    uploaded_file = st.file_uploader("Choose an image",accept_multiple_files=False,type=["png","jpg","jpeg"])
+    uploaded_file = st.file_uploader("Choose an image",accept_multiple_files=False,type=["png","jpg","jpeg","pgm"])
 
     if uploaded_file is not None:
         st.image(uploaded_file)
-        st.image(image_face_detector(np.array(Image.open(uploaded_file)),n=1,conf_thresh=0))
+        st.image(image_face_detector(np.array(Image.open(uploaded_file).convert("RGB")),n=1,conf_thresh=0))
         
         #display results
         for i,person in enumerate(glob("detected_faces/*.jpg")):
@@ -50,29 +50,17 @@ if selected=="Upload Image":
           
                 with col2:
                     st.subheader("Criminal profile")
-                    col1,col2,col3= st.columns(3)
-                    with col1:
-                        st.image(Image.open(query_response['matches'][0]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][0]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][0]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][0]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][0]["metadata"]["felony"]))
+                    cols= st.columns(3)
+                    
+                    for cn,col in enumerate(cols):
                         
-                    with col2:
-                        st.image(Image.open(query_response['matches'][1]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][1]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][1]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][1]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][1]["metadata"]["felony"]))
-                    with col3:
-                        st.image(Image.open(query_response['matches'][2]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][2]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][2]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][2]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][2]["metadata"]["felony"]))
+                        with col:
+                            st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
+                            st.divider()
+                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
 
 
 #Video
@@ -102,29 +90,17 @@ if selected=="Upload Video":
           
                 with col2:
                     st.subheader("Criminal profile")
-                    col1,col2,col3= st.columns(3)
-                    with col1:
-                        st.image(Image.open(query_response['matches'][0]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][0]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][0]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][0]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][0]["metadata"]["felony"]))
+                    cols= st.columns(3)
+                    
+                    for cn,col in enumerate(cols):
                         
-                    with col2:
-                        st.image(Image.open(query_response['matches'][1]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][1]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][1]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][1]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][1]["metadata"]["felony"]))
-                    with col3:
-                        st.image(Image.open(query_response['matches'][2]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][2]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][2]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][2]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][2]["metadata"]["felony"]))
+                        with col:
+                            st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
+                            st.divider()
+                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
 
     
 #webcam
@@ -157,26 +133,14 @@ if selected=="Webcam":
           
                 with col2:
                     st.subheader("Criminal profile")
-                    col1,col2,col3= st.columns(3)
-                    with col1:
-                        st.image(Image.open(query_response['matches'][0]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][0]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][0]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][0]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][0]["metadata"]["felony"]))
+                    cols= st.columns(3)
+                    
+                    for cn,col in enumerate(cols):
                         
-                    with col2:
-                        st.image(Image.open(query_response['matches'][1]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][1]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][1]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][1]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][1]["metadata"]["felony"]))
-                    with col3:
-                        st.image(Image.open(query_response['matches'][2]["metadata"]["path"]).resize((224,224)))
-                        st.divider()
-                        st.text("Name: "+query_response['matches'][2]["metadata"]["label"])
-                        st.text("Age: "+str(query_response['matches'][2]["metadata"]["age"]))
-                        st.text("Gender: "+str(query_response['matches'][2]["metadata"]["gender"]))
-                        st.text("Felony: "+str(query_response['matches'][2]["metadata"]["felony"]))
+                        with col:
+                            st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
+                            st.divider()
+                            st.text("Name: "+query_response['matches'][cn]["metadata"]["label"])
+                            st.text("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
+                            st.text("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
+                            st.text("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
