@@ -7,12 +7,25 @@ import av
 from ultralytics import YOLO
 import os
 from glob import glob
+import shutil
+import numpy as np
+from utility.model_utils import *
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics.pairwise import cosine_similarity,euclidean_distances
 
 face=YOLO("yolov8n-face.pt")
 
-os.mkdir("detected_faces")
-os.mkdir("uploaded_videos")
-os.mkdir("video_detection")
+def empty_files():
+    
+    shutil.rmtree("detected_faces", ignore_errors=True)
+    shutil.rmtree("uploaded_videos", ignore_errors=True)
+    shutil.rmtree("video_detection", ignore_errors=True)
+
+    os.mkdir("detected_faces")
+    os.mkdir("uploaded_videos")
+    os.mkdir("video_detection")
+    
+empty_files()
 
 def get_conf():
     confidences=[]
@@ -20,7 +33,57 @@ def get_conf():
         confidences.append(float(img.split("_")[-1].split(".jpg")[0]))
     return confidences
 
-def image_face_detector(image,n,flag=True):
+def best_images(img_folder,confidences):
+    
+    # Load all images in the folder and preprocess them for ResNet50
+    features=[]
+    orig_images=[]
+    for filename in glob("detected_faces/*"):
+        features.append(get_image_embedding(filename))
+        orig_images.append(cv2.imread(filename))
+    
+    features=np.array(features)
+
+    # Flatten the features into a 2D numpy array
+    features = features.reshape(features.shape[0], -1)
+
+    # Calculate cosine similarity matrix
+    cos_sim = cosine_similarity(features)
+
+    # Apply hierarchical clustering to the feature data
+    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.9)
+    hierarchical.fit(cos_sim)
+
+    # Get the labels assigned to each image
+    labels = hierarchical.labels_.astype(int)
+
+    # Create a new folder for the highest score images
+    high_score_folder = os.path.join(img_folder, 'highest_score_images')
+    if not os.path.exists(high_score_folder):
+        os.mkdir(high_score_folder)
+    # Process images from each cluster
+    for i in range(np.max(labels) + 1):
+        print(f'Processing images in cluster {i}...')
+        # Get the indices of the images in this cluster
+        indices = np.where(labels == i)[0]
+        # Calculate the score for each image in this cluster
+        scores = []
+        for idx in indices:
+            img = orig_images[idx]
+            brightness_score = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).mean()
+            contrast_score = np.std(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY))
+            sharpness_score = cv2.Laplacian(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), cv2.CV_64F).var()
+            confidence = confidences[idx]  # get the confidence value for this image
+            score = (0.5 * brightness_score + 0.3 * contrast_score + 0.2 * sharpness_score) * confidence
+            scores.append(score)
+        # Save the image with the highest score to the appropriate folder
+        highest_score_idx = np.argmax(scores)
+        highest_score_img = orig_images[indices[highest_score_idx]]
+        filename = os.path.join(high_score_folder, f'score_{scores[highest_score_idx]:.4f}_{indices[highest_score_idx]}.jpg')
+        cv2.imwrite(filename, highest_score_img)
+
+
+def image_face_detector(image,n,conf_thresh=0.79,flag=True):
     frame=image.copy()
     results=face(frame)
     boxes=results[0].boxes.xyxy
@@ -32,15 +95,19 @@ def image_face_detector(image,n,flag=True):
 
         frame = cv2.rectangle(frame, (x1, y1 - 20), (x1+ w, y1), (255, 0, 0), -1)
         frame = cv2.putText(frame, "face", (x1, y1 - 5),cv2.FONT_HERSHEY_DUPLEX, 0.6, (255,255,255), 1)
-
-        try:
-            if flag:
-                cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2,::-1])
-            else:
-                cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2])
+        if (float(results[0].boxes.conf[i-1])>=conf_thresh):
+ 
+            try:
+                if flag:
+                    cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2,::-1])
+                else:
+                    cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2])
+                i=i+1
+            except:
+                print("empty frame error")
+        else:
             i=i+1
-        except:
-            print("empty frame error")
+            continue
     return frame
 
 def video_face_detector(uploaded_file):
@@ -62,7 +129,7 @@ def video_face_detector(uploaded_file):
         ret, frame = cap.read()
         
         if ret == True:
-            out.write(image_face_detector(frame,counter+1,False))
+            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.79))
             my_bar.progress((counter + 1)/n_frame, text="Processing the video. Please Wait.")
             counter=counter+1
         else:
@@ -81,7 +148,7 @@ def video_frame_callback(frame):
 
     frame = frame.to_ndarray(format="bgr24")
 
-    processed = image_face_detector(frame, video_frame_callback.frame_number, False)
+    processed = image_face_detector(frame, video_frame_callback.frame_number, flag=False,conf_thresh=0.8)
 
     video_frame_callback.frame_number += 1
 

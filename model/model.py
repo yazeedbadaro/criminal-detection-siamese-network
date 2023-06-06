@@ -46,3 +46,8 @@ class SiameseNetwork(nn.Module):
         output2 = self.fc(output2)
         
         return output1,output2
+    
+    def forward_128(self, input):
+        output= self.forward_once(input)
+        output = self.fc(output)
+        return output
