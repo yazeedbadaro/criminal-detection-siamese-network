@@ -130,7 +130,7 @@ def video_face_detector(uploaded_file):
         ret, frame = cap.read()
         
         if ret == True:
-            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.79))
+            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.75))
             my_bar.progress((counter + 1)/n_frame, text="Processing the video. Please Wait.")
             counter=counter+1
         else:
