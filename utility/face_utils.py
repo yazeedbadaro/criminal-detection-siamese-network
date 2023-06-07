@@ -141,7 +141,7 @@ def video_face_detector(uploaded_file):
     
     try:
         convertedVideo = "video_detection/testh264.mp4"
-        ff = FFmpeg(executable='ffmpeg.exe',
+        ff = FFmpeg(executable='ffmpeg/ffmpeg.exe',
             inputs={'video_detection/output.mp4': "-y"},
             outputs={convertedVideo: '-c:v libx264'}
         )
