@@ -139,13 +139,23 @@ def video_face_detector(uploaded_file):
     cap.release()
     out.release()
     
-    convertedVideo = "video_detection/testh264.mp4"
-    ff = FFmpeg(executable='ffmpeg.exe',
-        inputs={'video_detection/output.mp4': "-y"},
-        outputs={convertedVideo: '-c:v libx264'}
-    )
-    ff.run()
-    st.video(convertedVideo)
+    try:
+        convertedVideo = "video_detection/testh264.mp4"
+        ff = FFmpeg(executable='ffmpeg.exe',
+            inputs={'video_detection/output.mp4': "-y"},
+            outputs={convertedVideo: '-c:v libx264'}
+        )
+        ff.run()
+        st.video(convertedVideo)
+
+    except:
+        convertedVideo = "video_detection/testh264.mp4"
+        ff = FFmpeg(
+            inputs={'video_detection/output.mp4': "-y"},
+            outputs={convertedVideo: '-c:v libx264'}
+        )
+        ff.run()
+        st.video(convertedVideo)
     
 def video_frame_callback(frame):
     if not hasattr(video_frame_callback, "frame_number"):
