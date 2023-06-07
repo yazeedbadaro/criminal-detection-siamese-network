@@ -12,6 +12,7 @@ import numpy as np
 from utility.model_utils import *
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics.pairwise import cosine_similarity,euclidean_distances
+from ffmpy import FFmpeg
 
 face=YOLO("yolov8n-face.pt")
 
@@ -139,7 +140,11 @@ def video_face_detector(uploaded_file):
     out.release()
     
     convertedVideo = "video_detection/testh264.mp4"
-    subprocess.call(args=f"ffmpeg -y -i video_detection/output.mp4 -c:v libx264 {convertedVideo}".split(" "))
+    ff = FFmpeg(executable='ffmpeg.exe',
+        inputs={'video_detection/output.mp4': "-y"},
+        outputs={convertedVideo: '-c:v libx264'}
+    )
+    ff.run()
     st.video(convertedVideo)
     
 def video_frame_callback(frame):
