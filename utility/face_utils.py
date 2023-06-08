@@ -52,7 +52,7 @@ def best_images(img_folder,confidences):
     cos_sim = cosine_similarity(features)
 
     # Apply hierarchical clustering to the feature data
-    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.9)
+    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.8)
     hierarchical.fit(cos_sim)
 
     # Get the labels assigned to each image
