@@ -90,35 +90,48 @@ if authentication_status:
                 empty_files()
                 st.image(image_face_detector(np.array(Image.open(uploaded_file).convert("RGB")),n=1,conf_thresh=0))
                 
-                #display results
-                for i,person in enumerate(glob("detected_faces/*.jpg")):
+                # Create a set to store the displayed labels
+                displayed_labels = set()
+
+                for i, person in enumerate(glob("detected_faces/*.jpg")):
                     query_response = index.query(
-                                        top_k=3,
-                                        include_values=False,
-                                        include_metadata=True,
-                                        vector=get_image_embedding(person).tolist(),
-                                    )
-                    
+                        top_k=10,
+                        include_values=False,
+                        include_metadata=True,
+                        vector=get_image_embedding(person).tolist(),
+                    )
+
                     with st.expander(f"Person {i+1}"):
-                        col1,col2= st.columns(2)
+                        col1, col2 = st.columns(2)
                         with col1:
-                            img=Image.open(person).resize((224,224))
+                            img = Image.open(person).resize((224, 224))
                             st.subheader("Detected person image")
-                            st.image(img) 
-                
+                            st.image(img)
+
                         with col2:
                             st.subheader("Criminal profile")
-                            cols= st.columns(3)
-                            
-                            for cn,col in enumerate(cols):
-                                
+                            cols = st.columns(3)
+
+                            for cn, col in enumerate(cols):
+                                label = query_response['matches'][cn]["metadata"]["label"]
+                                # Check if the label has already been displayed
+                                while label in displayed_labels:
+                                    # Find the next available label
+                                    cn += 1
+                                    if cn >= len(query_response['matches']):
+                                        break  # Break the loop if no more labels available
+                                    label = query_response['matches'][cn]["metadata"]["label"]
+
+                                displayed_labels.add(label)
+
                                 with col:
-                                    st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224,224)))
+                                    st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                     st.divider()
-                                    st.markdown("Name: "+query_response['matches'][cn]["metadata"]["label"])
-                                    st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
-                                    st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
-                                    st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
+                                    st.markdown("Name: " + label)
+                                    st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
+                                    st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
+                                    st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
+
 
 
     # Upload Video section
@@ -132,10 +145,13 @@ if authentication_status:
                 video_face_detector(uploaded_file)
                 best_images("detected_faces", get_conf())
 
+                # Create a set to store the displayed labels
+                displayed_labels = set()
+
                 # Display results for each uploaded file
                 for file_index, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
                     query_response = index.query(
-                        top_k=3,
+                        top_k=10,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
@@ -153,12 +169,21 @@ if authentication_status:
                             cols = st.columns(3)
 
                             for cn, col in enumerate(cols):
+                                label = query_response['matches'][cn]["metadata"]["label"]
+                                # Check if the label has already been displayed
+                                while label in displayed_labels:
+                                    # Find the next available label
+                                    cn += 1
+                                    if cn >= len(query_response['matches']):
+                                        break  # Break the loop if no more labels available
+                                    label = query_response['matches'][cn]["metadata"]["label"]
+
+                                displayed_labels.add(label)
+
                                 with col:
-                                    st.image(
-                                        Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224))
-                                    )
+                                    st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                     st.divider()
-                                    st.markdown("Name: " + query_response['matches'][cn]["metadata"]["label"])
+                                    st.markdown("Name: " + label)
                                     st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
                                     st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
                                     st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))

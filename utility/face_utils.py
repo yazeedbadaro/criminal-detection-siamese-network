@@ -84,32 +84,32 @@ def best_images(img_folder,confidences):
         cv2.imwrite(filename, highest_score_img)
 
 
-def image_face_detector(image,n,conf_thresh=0.79,flag=True):
-    frame=image.copy()
-    results=face(frame)
+def image_face_detector(image,n,conf_thresh=0.75,flag=True):
+    img=image.copy()
+    results=face(img)
     boxes=results[0].boxes.xyxy
     i=1
     for box in boxes:
         (x1,y1,x2,y2)=[int(x) for x in box.tolist()]
-        cv2.rectangle(frame,(x1,y1),(x2,y2),(255, 0, 0),2)
+        cv2.rectangle(img,(x1,y1),(x2,y2),(255, 0, 0),2)
         (w, h), _ = cv2.getTextSize("face", cv2.FONT_HERSHEY_DUPLEX, 0.6, 1)
 
-        frame = cv2.rectangle(frame, (x1, y1 - 20), (x1+ w, y1), (255, 0, 0), -1)
-        frame = cv2.putText(frame, "face", (x1, y1 - 5),cv2.FONT_HERSHEY_DUPLEX, 0.6, (255,255,255), 1)
+        img = cv2.rectangle(img, (x1, y1 - 20), (x1+ w, y1), (255, 0, 0), -1)
+        img = cv2.putText(img, "face", (x1, y1 - 5),cv2.FONT_HERSHEY_DUPLEX, 0.6, (255,255,255), 1)
         if (float(results[0].boxes.conf[i-1])>=conf_thresh):
  
             try:
                 if flag:
-                    cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2,::-1])
+                    cv2.imwrite(f"detected_faces/img{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2,::-1])
                 else:
-                    cv2.imwrite(f"detected_faces/frame{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2])
+                    cv2.imwrite(f"detected_faces/img{n}_face{i}_{float(results[0].boxes.conf[i-1])}.jpg",image[y1:y2, x1:x2])
                 i=i+1
             except:
-                print("empty frame error")
+                print("empty img error")
         else:
             i=i+1
             continue
-    return frame
+    return img
 
 def video_face_detector(uploaded_file):
     path=os.path.join("uploaded_videos",uploaded_file.name)
