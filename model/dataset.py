@@ -16,12 +16,13 @@ class ATATContrast(torch.utils.data.Dataset):
         self.transform = atat_dataset.transform
 
     def __getitem__(self,index):
+        new_imgs=self.imgs.copy()
         ## CHOOSE EITHER POSITIVE PAIR (0) OR NEGATIVE PAIR (1)
         self.target = np.random.randint(0,2)
         ## HERE THE FIRST IMAGE IS CHOSEN BY VIRTUE OF INDEX ITSELF
         img1,label1 = self.imgs[index]
         ## CREATE NEW LIST OF IMAGES TO AVOID RE-SELECTING ORIGINAL IMAGE
-        new_imgs = list(set(self.imgs) - set(self.imgs[index]))
+        new_imgs.remove(self.imgs[index])
         length = len(new_imgs)
         # print(length)
         random = np.random.RandomState(42)
