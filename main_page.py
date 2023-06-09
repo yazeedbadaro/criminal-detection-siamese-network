@@ -95,7 +95,7 @@ if authentication_status:
 
                 for i, person in enumerate(glob("detected_faces/*.jpg")):
                     query_response = index.query(
-                        top_k=12,
+                        top_k=400,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
@@ -125,13 +125,16 @@ if authentication_status:
                                 displayed_labels.add(label)
 
                                 with col:
-                                    st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
-                                    st.divider()
-                                    st.markdown("Name: " + label)
-                                    st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
-                                    st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
-                                    st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
-                                    st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                    try:
+                                        st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
+                                        st.divider()
+                                        st.markdown("Name: " + label)
+                                        st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
+                                        st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
+                                        st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
+                                        st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                    except:
+                                        pass
 
 
 
@@ -153,7 +156,7 @@ if authentication_status:
                 # Display results for each uploaded file
                 for file_index, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
                     query_response = index.query(
-                        top_k=12,
+                        top_k=400,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
@@ -183,14 +186,16 @@ if authentication_status:
                                 displayed_labels.add(label)
 
                                 with col:
-                                    st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
-                                    st.divider()
-                                    st.markdown("Name: " + label)
-                                    st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
-                                    st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
-                                    st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
-                                    st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
-
+                                    try:
+                                        st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
+                                        st.divider()
+                                        st.markdown("Name: " + label)
+                                        st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
+                                        st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
+                                        st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
+                                        st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                    except:
+                                        pass
 
         
     # Webcam section
