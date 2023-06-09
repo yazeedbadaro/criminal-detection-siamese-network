@@ -95,7 +95,7 @@ if authentication_status:
 
                 for i, person in enumerate(glob("detected_faces/*.jpg")):
                     query_response = index.query(
-                        top_k=10,
+                        top_k=12,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
@@ -153,7 +153,7 @@ if authentication_status:
                 # Display results for each uploaded file
                 for file_index, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
                     query_response = index.query(
-                        top_k=10,
+                        top_k=12,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
