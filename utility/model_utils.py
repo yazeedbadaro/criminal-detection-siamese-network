@@ -8,6 +8,10 @@ new_model.load_state_dict(torch.load('model/siameseNetowrk_final.pt', map_locati
 new_model.eval()
 
 def get_image_embedding(img_path):
-    convert_tensor = torchvision.transforms.ToTensor()
-    embd=new_model.forward_128(convert_tensor(Image.open(img_path).convert("RGB")).unsqueeze(0)).squeeze()
+    convert_tensor = valid_transforms = torchvision.transforms.Compose([
+            torchvision.transforms.Grayscale(),
+            torchvision.transforms.ToTensor(),
+            torchvision.transforms.Normalize([0.5], [0.5])
+        ])
+    embd=new_model.forward_128(convert_tensor(Image.open(img_path)).unsqueeze(0)).squeeze()
     return embd.detach().numpy()
