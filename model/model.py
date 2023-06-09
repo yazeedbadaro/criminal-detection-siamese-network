@@ -8,8 +8,8 @@ class SiameseNetwork(nn.Module):
         super(SiameseNetwork, self).__init__()
         # get resnet model
         self.resnet = torchvision.models.resnet18(weights=None)
-
-        self.resnet.conv1 = nn.Conv2d(3,64,3)
+        #changed the first conv layer to make it accept gray scale images
+        self.resnet.conv1 = nn.Conv2d(1,64,3)
         self.fc_in_features = self.resnet.fc.in_features
         
         # remove the last layer of resnet18 (linear layer which is before avgpool layer)
