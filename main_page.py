@@ -48,6 +48,10 @@ if authentication_status == None:
 
 if authentication_status:
     # ---- HEADER SECTION ----
+
+    #LOGOUT
+    authenticator.logout('Logout','main')
+
     # Initializing Pinecone index
     pinecone.init(api_key= "5030e476-e093-4104-83d0-ec6f09ca7542", environment="northamerica-northeast1-gcp")
     index = pinecone.Index("grad-index")
