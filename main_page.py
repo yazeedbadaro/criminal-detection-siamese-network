@@ -94,7 +94,7 @@ if selected=="Upload Image":
                             st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
                             st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
                             st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
-                            st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                            st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
 
 
 
@@ -136,7 +136,7 @@ if selected=="Upload Video":
                             st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
                             st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
                             st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
-                            st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                            st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
 
     
 #webcam
@@ -179,6 +179,6 @@ if selected=="Webcam":
                             st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
                             st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
                             st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
-                            st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                            st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
 
     empty_files()
