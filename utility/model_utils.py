@@ -8,8 +8,9 @@ new_model.load_state_dict(torch.load('model/siameseNetowrk_final.pt', map_locati
 new_model.eval()
 
 def get_image_embedding(img_path):
-    convert_tensor = valid_transforms = torchvision.transforms.Compose([
+    convert_tensor = torchvision.transforms.Compose([
             torchvision.transforms.Grayscale(),
+            torchvision.transforms.Resize((92,112)),
             torchvision.transforms.ToTensor(),
             torchvision.transforms.Normalize([0.5], [0.5])
         ])
