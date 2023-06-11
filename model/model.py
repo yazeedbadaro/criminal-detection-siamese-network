@@ -22,15 +22,6 @@ class SiameseNetwork(nn.Module):
             nn.Linear(256, 128),
         )
 
-        # initialize the weights
-        self.resnet.apply(self.init_weights)
-        self.fc.apply(self.init_weights)
-        
-    def init_weights(self, m):
-        if isinstance(m, nn.Linear):
-            torch.nn.init.xavier_uniform_(m.weight)
-            m.bias.data.fill_(0.01)
-
     def forward_once(self, x):
         output = self.resnet(x)
         output = output.view(output.size()[0], -1)

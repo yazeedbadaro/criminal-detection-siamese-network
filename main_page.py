@@ -136,7 +136,7 @@ if authentication_status:
                                         st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
                                         st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
                                         st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
-                                        st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                        st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
                                     except:
                                         pass
 
@@ -197,7 +197,7 @@ if authentication_status:
                                         st.markdown("Age: " + str(query_response['matches'][cn]["metadata"]["age"]))
                                         st.markdown("Gender: " + str(query_response['matches'][cn]["metadata"]["gender"]))
                                         st.markdown("Felony: " + str(query_response['matches'][cn]["metadata"]["felony"]))
-                                        st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                        st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
                                     except:
                                         pass
 
@@ -242,6 +242,6 @@ if authentication_status:
                                 st.markdown("Age: "+str(query_response['matches'][cn]["metadata"]["age"]))
                                 st.markdown("Gender: "+str(query_response['matches'][cn]["metadata"]["gender"]))
                                 st.markdown("Felony: "+str(query_response['matches'][cn]["metadata"]["felony"]))
-                                st.markdown("Score: "+str(round(query_response['matches'][cn]["score"],2)))
+                                st.markdown("Score: "+str(query_response['matches'][cn]["score"]))
 
     empty_files()
