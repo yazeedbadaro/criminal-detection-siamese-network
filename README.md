@@ -39,7 +39,7 @@ conda activate test
 ## Run the website:
 To run the website locally , run the following commands:
 ```
-git clone https://github.com/yazeedbadaro/criminal-detection_siamese-network.git
+git clone https://github.com/yazeedbadaro/criminal-detection-siamese-network.git
 pip install -r requirements.txt
 streamlit run main_page.py
 ```
