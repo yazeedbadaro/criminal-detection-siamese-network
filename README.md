@@ -1,12 +1,10 @@
 # Criminal Detection
 
-Our system is built to detect criminals and identify them using the pretrained yolo model ```yolov8n-face.pt``` and the siamese netowrk ```torchvision.models```. 
-
-![Results](resources/player_similarity.gif)
+Our system is built to detect criminals and identify them using a pretrained yolo model and the Siamese netowrk. 
 
 ## Design Choices:
-- The yolo algorithm used is the pretrained ```yolov8n-face.pt``` which detects faces from images or videos.
-- To identify the faces detected, we built a siamese network using the pretrained resNet18. The first convolutional layer is changed, and the last layer is  removed to add linear layers instead to get a 128 output size. 
+- The yolo algorithm used is a pretrained YOLOv8 model for face detection.
+- Siamese network with ResNet18 as its main core architecture implemented using pyTorch.
 
 
 ## Setting up the dataset.
@@ -27,6 +25,7 @@ The expected format for both the training and validation dataset is the same. Im
   .
   |--PersonN
 ```
+[Click here to see the dataset used](https://www.kaggle.com/datasets/kasikrit/att-database-of-faces) 
 
 
 ## Setting up environment.
@@ -37,7 +36,7 @@ conda activate test
 ```
 
 
-## Opening the website:
+## Run the website:
 To open the website, run the following commands:
 ```
 git clone https://github.com/yazeedbadaro/grad_final.git
