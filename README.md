@@ -40,7 +40,6 @@ conda activate test
 To run the website locally , run the following commands:
 ```
 git clone https://github.com/yazeedbadaro/grad_final.git
-conda activate test
 pip install -r requirements.txt
 streamlit run main_page.py
 ```
