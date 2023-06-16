@@ -26,7 +26,6 @@ def empty_files():
     os.mkdir("uploaded_videos")
     os.mkdir("video_detection")
     
-empty_files()
 
 def get_conf():
     confidences=[]
@@ -48,12 +47,12 @@ def best_images(img_folder,confidences):
     # Flatten the features into a 2D numpy array
     features = features.reshape(features.shape[0], -1)
 
-    # Calculate cosine similarity matrix
-    cos_sim = cosine_similarity(features)
+    # # Calculate cosine similarity matrix
+    # cos_sim = euclidean_distances(features)
 
     # Apply hierarchical clustering to the feature data
-    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.8)
-    hierarchical.fit(cos_sim)
+    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.2)
+    hierarchical.fit(features)
 
     # Get the labels assigned to each image
     labels = hierarchical.labels_.astype(int)
@@ -130,7 +129,7 @@ def video_face_detector(uploaded_file):
         ret, frame = cap.read()
         
         if ret == True:
-            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.75))
+            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.78))
             my_bar.progress((counter + 1)/n_frame, text="Processing the video. Please Wait.")
             counter=counter+1
         else:
