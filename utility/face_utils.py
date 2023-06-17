@@ -47,9 +47,6 @@ def best_images(img_folder,confidences):
     # Flatten the features into a 2D numpy array
     features = features.reshape(features.shape[0], -1)
 
-    # # Calculate cosine similarity matrix
-    # cos_sim = euclidean_distances(features)
-
     # Apply hierarchical clustering to the feature data
     hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.2)
     hierarchical.fit(features)
