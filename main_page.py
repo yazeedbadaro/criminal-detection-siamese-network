@@ -94,10 +94,12 @@ if authentication_status:
                 empty_files()
                 st.image(image_face_detector(np.array(Image.open(uploaded_file).convert("RGB")),n=1,conf_thresh=0))
                 
-                # Create a set to store the displayed labels
-                displayed_labels = set()
-
                 for i, person in enumerate(glob("detected_faces/*.jpg")):
+                    cn=0
+                    
+                    # Create a set to store the displayed labels
+                    displayed_labels = set()
+                    
                     query_response = index.query(
                         top_k=30,
                         include_values=False,
@@ -115,19 +117,18 @@ if authentication_status:
                         with col2:
                             st.subheader("Criminal profile")
                             cols = st.columns(3)
-
-                            for cn, col in enumerate(cols):
+                            
+                            for col in cols:
                                 label = query_response['matches'][cn]["metadata"]["label"]
                                 # Check if the label has already been displayed
                                 while label in displayed_labels:
                                     # Find the next available label
-                                    cn += 1
-                                    if cn >= len(query_response['matches'])-1:
+                                    if cn == len(query_response['matches'])-1:
                                         break  # Break the loop if no more labels available
+                                    cn += 1
                                     label = query_response['matches'][cn]["metadata"]["label"]
 
                                 displayed_labels.add(label)
-
                                 with col:
                                     st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                     st.divider()
@@ -149,16 +150,20 @@ if authentication_status:
                 best_images("detected_faces", get_conf())
 
                 # Display results for each uploaded file
-                for file_index, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
+                for i, person in enumerate(glob("detected_faces/*.jpg")):
+                    cn=0
+                    
+                    # Create a set to store the displayed labels
                     displayed_labels = set()
-
+                    
                     query_response = index.query(
                         top_k=30,
                         include_values=False,
                         include_metadata=True,
                         vector=get_image_embedding(person).tolist(),
                     )
-                    with st.expander(f"Person {file_index + 1}"):
+
+                    with st.expander(f"Person {i+1}"):
                         col1, col2 = st.columns(2)
                         with col1:
                             img = Image.open(person).resize((224, 224))
@@ -168,19 +173,19 @@ if authentication_status:
                         with col2:
                             st.subheader("Criminal profile")
                             cols = st.columns(3)
-
-                            for cn, col in enumerate(cols):
+                            
+                            for col in cols:
                                 label = query_response['matches'][cn]["metadata"]["label"]
                                 # Check if the label has already been displayed
                                 while label in displayed_labels:
                                     # Find the next available label
-                                    cn += 1
-                                    if cn >= len(query_response['matches'])-1:
+                                    if cn == len(query_response['matches'])-1:
                                         break  # Break the loop if no more labels available
+                                    cn += 1
                                     label = query_response['matches'][cn]["metadata"]["label"]
 
                                 displayed_labels.add(label)
-
+                                print(displayed_labels)
                                 with col:
                                     st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                     st.divider()
@@ -204,16 +209,20 @@ if authentication_status:
             best_images("detected_faces", get_conf())
 
             # Display results for each uploaded file
-            for file_index, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
+            for i, person in enumerate(glob("detected_faces/*.jpg")):
+                cn=0
+                
+                # Create a set to store the displayed labels
                 displayed_labels = set()
-
+                
                 query_response = index.query(
                     top_k=30,
                     include_values=False,
                     include_metadata=True,
                     vector=get_image_embedding(person).tolist(),
                 )
-                with st.expander(f"Person {file_index + 1}"):
+
+                with st.expander(f"Person {i+1}"):
                     col1, col2 = st.columns(2)
                     with col1:
                         img = Image.open(person).resize((224, 224))
@@ -223,19 +232,18 @@ if authentication_status:
                     with col2:
                         st.subheader("Criminal profile")
                         cols = st.columns(3)
-
-                        for cn, col in enumerate(cols):
+                        
+                        for col in cols:
                             label = query_response['matches'][cn]["metadata"]["label"]
                             # Check if the label has already been displayed
                             while label in displayed_labels:
                                 # Find the next available label
-                                cn += 1
-                                if cn >= len(query_response['matches'])-1:
+                                if cn == len(query_response['matches'])-1:
                                     break  # Break the loop if no more labels available
+                                cn += 1
                                 label = query_response['matches'][cn]["metadata"]["label"]
 
                             displayed_labels.add(label)
-
                             with col:
                                 st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                 st.divider()
