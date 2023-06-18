@@ -150,7 +150,7 @@ if authentication_status:
                 best_images("detected_faces", get_conf())
 
                 # Display results for each uploaded file
-                for i, person in enumerate(glob("detected_faces/*.jpg")):
+                for i, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
                     cn=0
                     
                     # Create a set to store the displayed labels
@@ -185,7 +185,6 @@ if authentication_status:
                                     label = query_response['matches'][cn]["metadata"]["label"]
 
                                 displayed_labels.add(label)
-                                print(displayed_labels)
                                 with col:
                                     st.image(Image.open(query_response['matches'][cn]["metadata"]["path"]).resize((224, 224)))
                                     st.divider()
@@ -209,7 +208,7 @@ if authentication_status:
             best_images("detected_faces", get_conf())
 
             # Display results for each uploaded file
-            for i, person in enumerate(glob("detected_faces/*.jpg")):
+            for i, person in enumerate(glob("detected_faces/highest_score_images/*.jpg")):
                 cn=0
                 
                 # Create a set to store the displayed labels

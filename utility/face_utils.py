@@ -48,7 +48,7 @@ def best_images(img_folder,confidences):
     features = features.reshape(features.shape[0], -1)
 
     # Apply hierarchical clustering to the feature data
-    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.2)
+    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.8)
     hierarchical.fit(features)
 
     # Get the labels assigned to each image
