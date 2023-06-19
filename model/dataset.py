@@ -21,6 +21,7 @@ class ATATContrast(torch.utils.data.Dataset):
         self.target = np.random.randint(0,2)
         ## HERE THE FIRST IMAGE IS CHOSEN BY VIRTUE OF INDEX ITSELF
         img1,label1 = self.imgs[index]
+        
         ## CREATE NEW LIST OF IMAGES TO AVOID RE-SELECTING ORIGINAL IMAGE
         new_imgs.remove(self.imgs[index])
         length = len(new_imgs)
