@@ -35,7 +35,7 @@ def get_conf():
 
 def best_images(img_folder,confidences):
     
-    # Load all images in the folder and preprocess them for ResNet50
+    # Load all images in the folder and preprocess them for ResNet18
     features=[]
     orig_images=[]
     for filename in glob("detected_faces/*"):
