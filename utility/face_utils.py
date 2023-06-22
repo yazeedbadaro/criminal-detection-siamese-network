@@ -48,7 +48,7 @@ def best_images(img_folder,confidences):
     features = features.reshape(features.shape[0], -1)
 
     # Apply hierarchical clustering to the feature data
-    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.8)
+    hierarchical = AgglomerativeClustering(n_clusters=None, linkage='average', distance_threshold=0.15)
     hierarchical.fit(features)
 
     # Get the labels assigned to each image
@@ -126,7 +126,7 @@ def video_face_detector(uploaded_file):
         ret, frame = cap.read()
         
         if ret == True:
-            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.78))
+            out.write(image_face_detector(frame,counter+1,flag=False,conf_thresh=0.75))
             my_bar.progress((counter + 1)/n_frame, text="Processing the video. Please Wait.")
             counter=counter+1
         else:
@@ -159,7 +159,7 @@ def video_frame_callback(frame):
 
     frame = frame.to_ndarray(format="bgr24")
 
-    processed = image_face_detector(frame, video_frame_callback.frame_number, flag=False,conf_thresh=0.8)
+    processed = image_face_detector(frame, video_frame_callback.frame_number, flag=False,conf_thresh=0.75)
 
     video_frame_callback.frame_number += 1
 
