@@ -43,3 +43,5 @@ git clone https://github.com/yazeedbadaro/criminal-detection-siamese-network.git
 pip install -r requirements.txt
 streamlit run main_page.py
 ```
+
+
